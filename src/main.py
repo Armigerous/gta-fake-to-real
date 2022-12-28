@@ -27,8 +27,11 @@ cities_list = [
 ]
 
 # create database table and populate it with release_list
-cursor.execute("CREATE TABLE IF NOT EXISTS gta (release_year integer, release_name text, city text)")
-cursor.executemany("INSERT INTO gta VALUES (?,?,?)", release_list)
+try:
+    cursor.execute("CREATE TABLE gta (release_year integer, release_name text, city text)")
+    cursor.executemany("INSERT INTO gta VALUES (?,?,?)", release_list)
+except:
+    print("already exists")
 connection.commit()
 # print all rows
 for row in cursor.execute("SELECT * FROM gta"):
@@ -46,9 +49,13 @@ print(gta_search)
 print("___________________________________")
 
 #make a list of fake and real cities
-cursor.execute("CREATE TABLE IF NOT EXISTS cities (gta_city text, real_city text)")
-cursor.executemany("INSERT INTO cities VALUES (?,?)", cities_list)
-cursor.execute("SELECT * FROM cities")
+try:
+    cursor.execute("CREATE TABLE cities (gta_city text, real_city text)")
+    cursor.executemany("INSERT INTO cities VALUES (?,?)", cities_list)
+    cursor.execute("SELECT * FROM cities")
+except:
+    print("already exists")
+
 connection.commit()
 cities_search = cursor.fetchall()
 print(cities_search)
